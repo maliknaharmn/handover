@@ -6,7 +6,7 @@ Pilot pertama berfokus pada KODISIA. Fondasi data tetap mendukung pemisahan anta
 
 ## Dokumen acuan
 
-- [BRD](docs/BRD.md) — tujuan dan kebutuhan bisnis untuk pemangku kepentingan.
+- [BRD](docs/BRD.md) dan [versi Word](docs/BRD.docx) — tujuan dan kebutuhan bisnis untuk pemangku kepentingan.
 - [PRD](docs/PRD.md) — perilaku produk, aturan, dan kriteria penerimaan MVP.
 - [Technical Design](docs/TECHNICAL_DESIGN.md) — arsitektur, model data, izin, dan rute.
 - [Setup](docs/SETUP.md) — cara menjalankan aplikasi dan status layanan.

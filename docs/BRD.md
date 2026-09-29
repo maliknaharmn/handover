@@ -6,7 +6,7 @@
 - **Tanggal:** 29 September 2026
 - **Status:** Draft untuk review user dan project manager
 - **Pemilik keputusan:** Product owner
-**Target awal:** KODISIA sebagai pilot pertama; fondasi data mendukung organisasi lain kelak
+- **Target awal:** KODISIA sebagai pilot pertama; fondasi data mendukung organisasi lain kelak
 
 ## 1. Ringkasan eksekutif
 
@@ -178,7 +178,7 @@ Uji terinci per layar, data, dan role mengikuti `PRD.md` dan rencana QA. Kriteri
 
 ## 11. Ketergantungan, peluncuran, dan pengambilan keputusan
 
-Sebelum pilot, project manager memastikan organisasi pilot, admin penanggung jawab, daftar periode dan posisi, calon anggota, checklist awal, serta metode aman transfer kredensial tersedia. Tim delivery memastikan akun pemilik GitHub, Supabase, dan Vercel, deployment, backup, dan prosedur pemulihan tercatat. Repository GitHub `maliknaharmn/handover` sudah tersedia; integrasi deployment tetap diverifikasi pada tahap setup.
+Sebelum pilot, project manager memastikan organisasi pilot, admin penanggung jawab, daftar periode dan posisi, calon anggota, checklist awal, serta metode aman transfer kredensial tersedia. Tim delivery memastikan akun pemilik GitHub, Supabase, dan Vercel, deployment, backup, dan prosedur pemulihan tercatat. Repository GitHub `maliknaharmn/handover` sudah tersedia; integrasi deployment otomatis dilakukan setelah UAT dan gerbang keamanan pilot terpenuhi.
 
 **Rencana pilot:** siapkan satu organisasi dan satu transisi nyata; masukkan 20–50 item dari lima kategori; lakukan UAT dengan admin, outgoing, dan incoming; uji revisi, konflik, mobile, serta isolasi tenant kedua; selesaikan seluruh masalah kritis; luncurkan terbatas; tinjau metrik dan wawancara pengguna tiap minggu. Handover dinyatakan selesai hanya sesuai RULE-05.
 
