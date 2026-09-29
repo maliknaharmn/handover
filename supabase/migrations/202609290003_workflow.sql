@@ -6,13 +6,17 @@ begin
       or to_jsonb(new)->>'id' is distinct from to_jsonb(old)->>'id' then
       raise exception 'Identitas baris tidak dapat diubah';
     end if;
-    if tg_table_name = 'handovers' and old.status <> 'draft'
-      and (new.from_period_id is distinct from old.from_period_id or new.to_period_id is distinct from old.to_period_id) then
-      raise exception 'Periode handover aktif tidak dapat diganti';
+    if tg_table_name = 'handovers' then
+      if old.status <> 'draft'
+        and (new.from_period_id is distinct from old.from_period_id or new.to_period_id is distinct from old.to_period_id) then
+        raise exception 'Periode handover aktif tidak dapat diganti';
+      end if;
     end if;
-    if tg_table_name = 'handover_assignments' and (new.handover_id is distinct from old.handover_id
-      or new.position_id is distinct from old.position_id) then
-      raise exception 'Posisi atau handover assignment tidak dapat diganti';
+    if tg_table_name = 'handover_assignments' then
+      if new.handover_id is distinct from old.handover_id
+        or new.position_id is distinct from old.position_id then
+        raise exception 'Posisi atau handover assignment tidak dapat diganti';
+      end if;
     end if;
   end if;
   if tg_table_name = 'handover_items' and tg_op = 'INSERT' then
@@ -23,7 +27,7 @@ begin
       raise exception 'Item baru harus dimulai sebagai draft aktif';
     end if;
     if (new.title || ' ' || new.description || ' ' || new.notes || ' ' || new.details::text) ~*
-      '(password[[:space:]]*[:=]|recovery[[:space:]]*code[[:space:]]*[:=]|api[_ -]?key[[:space:]]*[:=])' then
+      '((password|recovery[ _-]?code|api[_ -]?key|access[_ -]?token|client[_ -]?secret)["[:space:]]*[:=])' then
       raise exception 'Jangan simpan rahasia dalam item';
     end if;
   end if;
@@ -122,7 +126,7 @@ begin
     if p_action = 'admin_correct' then
       v_reason := btrim(coalesce(p_payload->>'reason',''));
       if not v_admin or pg_catalog.length(v_reason) < 5 then raise exception 'Koreksi admin memerlukan alasan'; end if;
-      if v_reason ~* '(password[[:space:]]*[:=]|recovery[[:space:]]*code[[:space:]]*[:=]|api[_ -]?key[[:space:]]*[:=])' then
+      if v_reason ~* '((password|recovery[ _-]?code|api[_ -]?key|access[_ -]?token|client[_ -]?secret)["[:space:]]*[:=])' then
         raise exception 'Jangan tulis rahasia dalam alasan'; end if;
     end if;
     if jsonb_typeof(p_payload) <> 'object' or pg_catalog.length(p_payload::text) > 20000 then raise exception 'Data item tidak valid'; end if;
@@ -136,7 +140,7 @@ begin
     if pg_catalog.length(v_title) > 200 or pg_catalog.length(v_desc) > 8000 or jsonb_typeof(v_details) <> 'object' then
       raise exception 'Konten item tidak valid';
     end if;
-    if (v_title || ' ' || v_desc || ' ' || coalesce(p_payload->>'notes',v_item.notes) || ' ' || v_details::text) ~* '(password[[:space:]]*[:=]|recovery[[:space:]]*code[[:space:]]*[:=]|api[_ -]?key[[:space:]]*[:=])' then
+    if (v_title || ' ' || v_desc || ' ' || coalesce(p_payload->>'notes',v_item.notes) || ' ' || v_details::text) ~* '((password|recovery[ _-]?code|api[_ -]?key|access[_ -]?token|client[_ -]?secret)["[:space:]]*[:=])' then
       raise exception 'Jangan simpan password, recovery code, atau API key';
     end if;
     update public.handover_items set title = v_title, description = v_desc,
@@ -176,7 +180,7 @@ begin
     v_reason := btrim(coalesce(p_payload->>'reason',''));
     if p_action = 'revise' and (pg_catalog.length(v_reason) < 5 or pg_catalog.length(v_reason) > 4000) then
       raise exception 'Alasan revisi wajib diisi (5–4000 karakter)'; end if;
-    if v_reason ~* '(password[[:space:]]*[:=]|recovery[[:space:]]*code[[:space:]]*[:=]|api[_ -]?key[[:space:]]*[:=])' then
+    if v_reason ~* '((password|recovery[ _-]?code|api[_ -]?key|access[_ -]?token|client[_ -]?secret)["[:space:]]*[:=])' then
       raise exception 'Jangan tulis rahasia dalam alasan'; end if;
     update public.handover_items set status = case when p_action = 'verify' then 'verified' else 'revision_required' end,
       verified_by = case when p_action = 'verify' then auth.uid() else null end,
@@ -194,7 +198,7 @@ begin
     v_reason := btrim(coalesce(p_payload->>'reason',''));
     if not v_admin or v_item.status <> 'verified' or pg_catalog.length(v_reason) < 5 then
       raise exception 'Admin harus memberi alasan untuk membuka ulang item verified'; end if;
-    if v_reason ~* '(password[[:space:]]*[:=]|recovery[[:space:]]*code[[:space:]]*[:=]|api[_ -]?key[[:space:]]*[:=])' then
+    if v_reason ~* '((password|recovery[ _-]?code|api[_ -]?key|access[_ -]?token|client[_ -]?secret)["[:space:]]*[:=])' then
       raise exception 'Jangan tulis rahasia dalam alasan'; end if;
     update public.handover_items set status = 'in_progress', verified_by = null, verified_at = null,
       version = version + 1 where id = p_item_id returning * into v_item;
@@ -204,7 +208,7 @@ begin
     if pg_catalog.length(v_reason) < 1 or pg_catalog.length(v_reason) > 4000 or
       (not v_admin and v_assignment.outgoing_user_id <> auth.uid() and v_assignment.incoming_user_id <> auth.uid()) then
       raise exception 'Komentar tidak diizinkan'; end if;
-    if v_reason ~* '(password[[:space:]]*[:=]|recovery[[:space:]]*code[[:space:]]*[:=]|api[_ -]?key[[:space:]]*[:=])' then
+    if v_reason ~* '((password|recovery[ _-]?code|api[_ -]?key|access[_ -]?token|client[_ -]?secret)["[:space:]]*[:=])' then
       raise exception 'Jangan simpan rahasia dalam komentar'; end if;
     insert into public.handover_item_comments(organization_id,handover_id,item_id,author_id,body)
       values (v_item.organization_id,v_item.handover_id,v_item.id,auth.uid(),v_reason);
@@ -250,7 +254,7 @@ begin
     perform pg_catalog.set_config('app.handover_transition','allowed',true);
     update public.handovers set status = 'active', completed_at = null where id = v_h.id returning * into v_h;
   else raise exception 'Transisi handover atau alasan tidak valid'; end if;
-  if p_reason ~* '(password[[:space:]]*[:=]|recovery[[:space:]]*code[[:space:]]*[:=]|api[_ -]?key[[:space:]]*[:=])' then
+  if p_reason ~* '((password|recovery[ _-]?code|api[_ -]?key|access[_ -]?token|client[_ -]?secret)["[:space:]]*[:=])' then
     raise exception 'Jangan tulis rahasia dalam alasan'; end if;
   insert into public.activity_logs(organization_id,handover_id,actor_id,event_type,summary,old_status,new_status,reason)
   values (v_h.organization_id,v_h.id,auth.uid(),'handover.'||p_action,'Handover '||p_action,v_old,v_h.status,
@@ -270,7 +274,7 @@ begin
   if v_h.status = 'completed' then raise exception 'Handover telah selesai'; end if;
   if v_h.status = 'active' and pg_catalog.length(btrim(coalesce(p_reason,''))) < 5 then
     raise exception 'Alasan perubahan pada handover aktif wajib diisi'; end if;
-  if p_reason ~* '(password[[:space:]]*[:=]|recovery[[:space:]]*code[[:space:]]*[:=]|api[_ -]?key[[:space:]]*[:=])' then
+  if p_reason ~* '((password|recovery[ _-]?code|api[_ -]?key|access[_ -]?token|client[_ -]?secret)["[:space:]]*[:=])' then
     raise exception 'Jangan tulis rahasia dalam alasan'; end if;
   if v_item.status = 'verified' and not p_active then raise exception 'Buka ulang item verified sebelum menonaktifkannya'; end if;
   if v_item.status = 'verified' and p_assignment_id <> v_item.assignment_id then
@@ -309,7 +313,7 @@ begin
     raise exception 'Penyerah/penerima harus berbeda dan alasan wajib diisi'; end if;
   if p_outgoing = v_a.outgoing_user_id and p_incoming = v_a.incoming_user_id then
     raise exception 'Pasangan tidak berubah'; end if;
-  if p_reason ~* '(password[[:space:]]*[:=]|recovery[[:space:]]*code[[:space:]]*[:=]|api[_ -]?key[[:space:]]*[:=])' then
+  if p_reason ~* '((password|recovery[ _-]?code|api[_ -]?key|access[_ -]?token|client[_ -]?secret)["[:space:]]*[:=])' then
     raise exception 'Jangan tulis rahasia dalam alasan'; end if;
   if not exists (select 1 from public.position_assignments pa join public.organization_members m
     on m.organization_id = pa.organization_id and m.user_id = pa.user_id and m.is_active and 'outgoing' = any(m.roles)

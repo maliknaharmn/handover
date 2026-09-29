@@ -24,4 +24,4 @@ Next.js App Router, TypeScript, Tailwind CSS, shadcn/ui, Supabase Auth/PostgreSQ
 3. Jalankan `pnpm install` dan `pnpm dev`.
 4. Buka `http://localhost:3000`.
 
-**Status:** kode Foundation, workflow handover, dashboard, pencarian, notifikasi, dan antarmuka berbasis design system sudah disiapkan. Migration database dan konfigurasi email Auth belum diterapkan ke Supabase pengembangan; karena itu aplikasi belum siap dipakai anggota. QA alur nyata dan pilot/deploy mengikuti gerbang pada dokumen di atas.
+**Status:** kode Foundation, workflow handover, dashboard, pencarian, notifikasi, dan antarmuka berbasis design system sudah disiapkan. Migration lulus smoke test pada PostgreSQL sementara, tetapi belum diterapkan ke Supabase pengembangan. Konfigurasi email Auth, QA alur nyata, dan pilot/deploy masih menunggu gerbang pada dokumen di atas; aplikasi belum siap dipakai anggota.

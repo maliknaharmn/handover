@@ -1,6 +1,6 @@
 # Setup pengembangan Handover KODISIA
 
-**Status per 29 September 2026:** kode MVP tersedia; migration dan konfigurasi email Auth pada Supabase pengembangan belum diterapkan. Tidak ada data nyata KODISIA atau deployment production.
+**Status per 29 September 2026:** kode MVP tersedia dan migration lulus smoke test pada PostgreSQL sementara. Migration dan konfigurasi email Auth pada Supabase pengembangan belum diterapkan. Tidak ada data nyata KODISIA atau deployment production.
 
 ## Lokal
 

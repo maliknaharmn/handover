@@ -1,6 +1,6 @@
 # QA Plan — Handover KODISIA MVP
 
-**Status:** rencana gerbang. Build, TypeScript, dan lint dapat diverifikasi lokal. Skenario database, role, email, browser, dan UAT belum dijalankan pada layanan pengembangan.
+**Status per 29 September 2026:** build, TypeScript, dan lint lulus. Ketiga migration berhasil diterapkan berurutan pada PostgreSQL 18 sementara dengan stub Supabase Auth. Skenario sintetis lokal untuk bootstrap, penyerahan → revisi → verifikasi → penutupan, metrik, isolasi organisasi, penolakan ID item lintas organisasi, konflik versi, penolakan detail password, dan perlindungan admin terakhir lulus. Ini belum menggantikan uji RLS, role, email, browser, mobile, dan UAT pada layanan Supabase pengembangan.
 
 ## Lingkungan uji
 
