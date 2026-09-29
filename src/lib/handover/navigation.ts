@@ -10,7 +10,7 @@ export function textValue(form: FormData, key: string, max = 4000) {
 }
 
 export function safeNext(next: string | null) {
-  return next?.startsWith("/") && !next.startsWith("//") ? next : "/workspaces";
+  return next === "/auth/invite" || next === "/reset-password" ? next : "/workspaces";
 }
 
 export function safeUuid(value: string | undefined) {
