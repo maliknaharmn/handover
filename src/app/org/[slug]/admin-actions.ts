@@ -29,7 +29,7 @@ export async function inviteMember(slug: string, form: FormData) {
   const memberRoles = roles(form);
   const path = `/org/${slug}/settings/members`;
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !memberRoles.length) done(path, "Email dan minimal satu role diperlukan.");
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const key = process.env.SUPABASE_SECRET_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!key) done(path, "Layanan undangan belum dikonfigurasi oleh pemilik proyek.");
   const { data: invitation, error: recordError } = await supabase.from("organization_invitations")
     .insert({ organization_id: org.id, email, roles: memberRoles, invited_by: userId })
@@ -51,7 +51,10 @@ export async function inviteMember(slug: string, form: FormData) {
   }
   if (sendError) {
     await supabase.from("organization_invitations").update({ status: "revoked" }).eq("id", invitation.id);
-    done(path, `Undangan belum terkirim: ${sendError.message}`);
+    const message = sendError.code === "email_address_not_authorized"
+      ? "Undangan belum terkirim. Atur SMTP khusus di Supabase untuk mengirim ke alamat di luar tim proyek."
+      : `Undangan belum terkirim: ${sendError.message}`;
+    done(path, message);
   }
   done(path, undefined, "Undangan dikirim.");
 }

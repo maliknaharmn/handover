@@ -155,7 +155,7 @@ Completion = `verified required active / all required active`. Denominator nol d
 | Preview | Vercel preview + Supabase project nonproduksi; tidak memakai data nyata KODISIA. |
 | Production | Vercel production + Supabase production; hanya setelah UAT dan security gate. |
 
-Environment minimal: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, dan kunci server untuk operasi undangan (`SUPABASE_SERVICE_ROLE_KEY`) hanya jika benar-benar diperlukan. `.env.example` berisi nama dan placeholder, bukan nilai rahasia. Validasi environment saat startup/build untuk fitur yang membutuhkannya. Jangan memuat kunci service role pada komponen client atau log.
+Environment minimal: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, dan kunci server untuk operasi undangan (`SUPABASE_SECRET_KEY`) hanya jika benar-benar diperlukan. `.env.example` berisi nama dan placeholder, bukan nilai rahasia. Validasi environment saat startup/build untuk fitur yang membutuhkannya. Jangan memuat secret key pada komponen client atau log.
 
 Migration SQL disimpan di repo dan diterapkan berurutan pada nonproduksi lalu production. Seed KODISIA hanya untuk data yang disetujui; akun pengguna nyata masuk via undangan. Backup dan prosedur restore diperiksa sesuai paket Supabase yang dipilih sebelum pilot. Error monitoring tidak menyimpan isi item, kontak, atau token. Deploy production mengikuti gerbang go/no-go PRD.
 

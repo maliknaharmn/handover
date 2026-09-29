@@ -2,7 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 
 export async function GET(request: Request) {
   const secret = process.env.CRON_SECRET;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const serviceKey = process.env.SUPABASE_SECRET_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!secret || !serviceKey) return new Response("Cron belum dikonfigurasi", { status: 503 });
   if (request.headers.get("authorization") !== `Bearer ${secret}`) return new Response("Unauthorized", { status: 401 });
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, serviceKey, {
