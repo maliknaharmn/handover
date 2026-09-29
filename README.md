@@ -9,7 +9,9 @@ Pilot pertama berfokus pada KODISIA. Fondasi data tetap mendukung pemisahan anta
 - [BRD](docs/BRD.md) dan [versi Word](docs/BRD.docx) — tujuan dan kebutuhan bisnis untuk pemangku kepentingan.
 - [PRD](docs/PRD.md) — perilaku produk, aturan, dan kriteria penerimaan MVP.
 - [Technical Design](docs/TECHNICAL_DESIGN.md) — arsitektur, model data, izin, dan rute.
+- [Design System](docs/DESIGN.md) — token visual dan aturan layar publik/workspace.
 - [Setup](docs/SETUP.md) — cara menjalankan aplikasi dan status layanan.
+- [QA Plan](docs/QA_PLAN.md) dan [Pilot Runbook](docs/PILOT_RUNBOOK.md) — gerbang verifikasi dan peluncuran.
 
 ## Teknologi
 
@@ -22,4 +24,4 @@ Next.js App Router, TypeScript, Tailwind CSS, shadcn/ui, Supabase Auth/PostgreSQ
 3. Jalankan `pnpm install` dan `pnpm dev`.
 4. Buka `http://localhost:3000`.
 
-**Status:** PRD, technical design, kerangka aplikasi, serta proyek Supabase dan Vercel pengembangan sudah disiapkan. Fitur login, database bisnis, dan workflow handover masuk fase berikutnya.
+**Status:** kode Foundation, workflow handover, dashboard, pencarian, notifikasi, dan antarmuka berbasis design system sudah disiapkan. Migration database dan konfigurasi email Auth belum diterapkan ke Supabase pengembangan; karena itu aplikasi belum siap dipakai anggota. QA alur nyata dan pilot/deploy mengikuti gerbang pada dokumen di atas.

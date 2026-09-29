@@ -1,7 +1,7 @@
 # Technical Design Handover KODISIA
 
 - **Versi:** 1.0 · 29 September 2026
-- **Status:** Desain untuk implementasi setelah setup
+- **Status:** Rancangan yang dipakai implementasi; migration dan kode aplikasi disiapkan, belum diterapkan ke Supabase pengembangan
 - **Acuan:** [BRD](BRD.md) dan [PRD](PRD.md) versi 1.2
 
 ## 1. Keputusan arsitektur
@@ -20,6 +20,8 @@ flowchart LR
 ```
 
 **Batas fase:** Dokumen ini mengunci bentuk rancangan. Project Setup membuat repository, app, konfigurasi UI, dan koneksi layanan. SQL migration, halaman auth, serta workflow item dibangun pada Foundation/Core Workflow setelah proyek layanan dan environment tersedia.
+
+**Catatan implementasi:** Migration sumber kebenaran berada di `supabase/migrations/` dan harus dijalankan berurutan. Route `search` dan `activity` tingkat organisasi ditambahkan untuk memenuhi pencarian lintas arsip dan riwayat yang disebut PRD. `docs/SETUP.md` mencatat aktivasi database, template email Auth, serta environment. Perbedaan dokumentasi ini tidak mengubah business rules PRD.
 
 ## 2. Model data v1
 
